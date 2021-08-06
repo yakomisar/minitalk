@@ -4,9 +4,17 @@
 
 void	ft_convert(char *str)
 {
-	int	i;
+	int		i;
+	int		result;
+	char	msg;
 
 	i = 0;
+	result = 0;
+	while (str[i] != '\0')
+	{
+		result = result * 2 + (msg - '0');
+	}
+	printf("Result: %d\n", result);	
 }
 
 void	my_handler(int signum)
@@ -33,7 +41,6 @@ void	my_handler(int signum)
 		ft_convert(msg);
 		byte = 0;
 	}
-	
 }
 
 int	main(void)
