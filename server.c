@@ -43,18 +43,66 @@
 // 	}
 // }
 
+// void	my_handler(int signum)
+// {
+// 	static char	msg[9];
+// 	static int	bty;
+// 	int			i;
+
+// 	printf("%d ", bty);
+// 	if (bty < 8)
+// 	{
+// 		if (signum == SIGUSR1)
+// 		{
+// 			msg[bty] = '1';
+// 			printf("dmmdv;v 1");
+// 			bty++;
+// 			//usleep(50);
+// 		}
+// 		if (signum == SIGUSR2)
+// 		{
+// 			msg[bty] = '0';
+// 			printf("afafwefwekn0");
+// 			bty++;
+// 			//usleep(50);
+// 		}
+// 	}
+// }
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
 void	my_handler(int signum)
 {
-	if (signum == SIGUSR1)
+	static char	msg[9];
+	static int	i;
+	
+	if (i < 8)
 	{
-		printf("Catch SIGUSR1\n");
-		usleep(50);
+		//printf("%d - ", i);
+		
+		if (signum == SIGUSR1)
+		{
+			//printf("Catch SIGUSR1\n");
+			msg[i] = '1';
+			ft_putchar(msg[i]);
+			usleep(50);
+		}
+		if (signum == SIGUSR2)
+		{
+			//printf("Catch SIGUSR2\n");
+			msg[i] = '0';
+			ft_putchar(msg[i]);
+			usleep(50);
+		}	
+		i++;
 	}
-	if (signum == SIGUSR2)
+	if (i > 7)
 	{
-		printf("Catch SIGUSR2\n");
-		usleep(50);
-	}	
+		i = 0;
+	}
 }
 
 int	main(void)
