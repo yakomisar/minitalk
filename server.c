@@ -22,7 +22,7 @@ void	my_handler(int signum)
 	static char	msg[8];
 	static int	byte;
 
-	byte = 0;
+	//byte = 0;
 	while (byte < 8)
 	{
 		if (signum == SIGUSR1)
@@ -43,16 +43,30 @@ void	my_handler(int signum)
 	}
 }
 
+// void	my_handler(int signum)
+// {
+// 	if (signum == SIGUSR1)
+// 	{
+// 		printf("Catch SIGUSR1\n");
+// 	}
+// 	if (signum == SIGUSR2)
+// 	{
+// 		printf("Catch SIGUSR2\n");
+// 	}	
+// }
+
 int	main(void)
 {
-	int my_pid;
+	pid_t my_pid;
 
 	my_pid = getpid();
-	printf("Please use the following pid-number: %d in order to connect to the server.", my_pid);
+	printf("Please use the following pid-number: %d in order to connect to the server.\n", my_pid);
+	
 	while (1)
 	{
-		signal(SIGUSR1, my_handler);
 		signal(SIGUSR2, my_handler);
+		signal(SIGUSR1, my_handler);
+		pause();
 	}
 	return (0);
 }

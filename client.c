@@ -34,6 +34,7 @@ void	send_data(int pid, char c)
 {
 	int counter;
 
+	//printf("%d", pid);
 	counter = 128;
 	while (counter >= 1)
 	{
@@ -41,12 +42,15 @@ void	send_data(int pid, char c)
 		{
 			//printf("%d", 1);
 			kill(pid, SIGUSR1);
+			usleep(100);
 		}
 		else
 		{
 			//printf("%d", 0);
 			kill(pid, SIGUSR2);
+			usleep(100);
 		}
+		printf("%d\n", counter);
 		counter /= 2;
 	}
 	
@@ -66,6 +70,17 @@ void	message_handler(int pid, char *msg)
 	//send_data(pid, msg[i]);
 	send_data(pid, msg[i]);
 }
+
+// void	message_handler(int pid, char *c)
+// {
+// 	// pid_t some;
+
+// 	// some = pid;
+// 	printf("%d", pid);
+// 	kill(pid, SIGUSR1);
+// 	kill(pid, SIGUSR2);
+// 	//usleep(100);
+// }
 
 int main(int argc, char **argv)
 {
