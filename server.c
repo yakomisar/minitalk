@@ -48,12 +48,12 @@ void	my_handler(int signum)
 	if (signum == SIGUSR1)
 	{
 		printf("Catch SIGUSR1\n");
-		//usleep(50);
+		usleep(50);
 	}
 	if (signum == SIGUSR2)
 	{
 		printf("Catch SIGUSR2\n");
-		//usleep(50);
+		usleep(50);
 	}	
 }
 

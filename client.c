@@ -71,14 +71,41 @@ int	ft_atoi(const char *str)
 // 	send_data(pid, msg[i]);
 // }
 
+void	send_symbol(int pid, char s)
+{
+	int counter;
+
+	counter = 128;
+	while (counter >= 1)
+	{
+		if (s & counter)
+		{
+			//printf("%d", 1);
+			kill(pid, SIGUSR1);
+			usleep(100);
+		}
+		else
+		{
+			//printf("%d", 0);
+			kill(pid, SIGUSR2);
+			usleep(100);
+		}
+		//printf("%d\n", counter);
+		counter /= 2;
+	}
+}
+
 void	message_handler(int pid, char *c)
 {
-	// pid_t some;
+	int	i;
 
-	// some = pid;
-	printf("%d", pid);
-	kill(pid, SIGUSR1);
-	kill(pid, SIGUSR2);
+	i = 0;
+	while (c[i] != '\0')
+	{
+		send_symbol(pid, c[i]);
+		//kill(pid, SIGUSR2);
+		i++;
+	}
 }
 
 int main(int argc, char **argv)
@@ -87,10 +114,6 @@ int main(int argc, char **argv)
         printf ("Please use the following format: [PID] [messaage]\n");
     if (argc > 3)
         printf("Please ensure that your message has been placed in quotes \"message\"\n");
-    //printf("argc1 : %s ", argv[1]);
-    //signal(SIGUSR1, my_handler);
-    //kill(getpid(), SIGUSR1);
-    //kill(ft_atoi(argv[1]), SIGUSR1);
 	message_handler(ft_atoi(argv[1]), argv[2]);
     return (0);
 }
