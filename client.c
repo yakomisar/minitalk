@@ -80,17 +80,14 @@ void	send_symbol(int pid, char s)
 	{
 		if (s & counter)
 		{
-			//printf("%d", 1);
 			kill(pid, SIGUSR1);
 			usleep(100);
 		}
 		else
 		{
-			//printf("%d", 0);
 			kill(pid, SIGUSR2);
 			usleep(100);
 		}
-		//printf("%d\n", counter);
 		counter /= 2;
 	}
 }
@@ -103,7 +100,6 @@ void	message_handler(int pid, char *c)
 	while (c[i] != '\0')
 	{
 		send_symbol(pid, c[i]);
-		//kill(pid, SIGUSR2);
 		i++;
 	}
 }
