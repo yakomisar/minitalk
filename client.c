@@ -81,12 +81,12 @@ void	send_symbol(int pid, char s)
 		if (s & counter)
 		{
 			kill(pid, SIGUSR1);
-			usleep(1000);
+			usleep(100);
 		}
 		else
 		{
 			kill(pid, SIGUSR2);
-			usleep(1000);
+			usleep(100);
 		}
 		counter /= 2;
 	}
