@@ -1,27 +1,33 @@
 SERVER		= server
 CLIENT		= client
 
-cc			= gcc
-FLAGS		= -WALL -WEXTRA -WERROR
-INCL		= srcs/
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+RM = rm -f
 
-all:		$(SERVER) $(CLIENT)
+SRC_S = server.c
+SRC_C = client.c
 
-$(SERVER)	: server.o support.o srcs/minitalk.h
-			@$(cc) server.o support.o -o $@
-			@echo "server has been build"
+OBJ_S = $(SRC_S:%.c=%.o)
+OBJ_C = $(SRC_C:%.c=%.o)
 
-$(CLIENT)	: client.o support.o srcs/minitalk.h
-			@$(cc) client.o support.o -o $@
-			@echo "client has been build"
+%.o: %.c
+	$(CC) $(CFLAGS) -I . -c $< -o $@
 
-%.o	: %.c
-	@$(cc) $(FLAGS) $< -c -I $(INCL)
+all: $(SERVER) $(CLIENT)
 
-clean	:
-		@rm -rf *.o
+$(SERVER): $(OBJ_S)
+	$(CC) $(CFLAGS) $< -o $@
 
-fclean	: clean
-		@rm $(SERVER) $(CLIENT)
+$(CLIENT): $(OBJ_C)
+	$(CC) $(CFLAGS) $< -o $@
 
-re	: fclean all
+clean:
+	$(RM) $(OBJ_S) $(OBJ_C)
+
+fclean: clean
+	$(RM) $(SERVER) $(CLIENT)
+
+re: fclean all
+
+.PHONY: all clean fclean re
