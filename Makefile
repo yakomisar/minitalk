@@ -5,8 +5,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
-SRC_S = server.c
-SRC_C = client.c
+SRC_S = server.c minitalk.c
+SRC_C = client.c minitalk.c
 
 OBJ_S = $(SRC_S:%.c=%.o)
 OBJ_C = $(SRC_C:%.c=%.o)
@@ -17,10 +17,10 @@ OBJ_C = $(SRC_C:%.c=%.o)
 all: $(SERVER) $(CLIENT)
 
 $(SERVER): $(OBJ_S)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 $(CLIENT): $(OBJ_C)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 	$(RM) $(OBJ_S) $(OBJ_C)
