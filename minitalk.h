@@ -6,7 +6,7 @@
 /*   By: jmacmill <jmacmill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 13:53:17 by jmacmill          #+#    #+#             */
-/*   Updated: 2021/09/05 13:55:13 by jmacmill         ###   ########.fr       */
+/*   Updated: 2021/09/05 18:05:26 by jmacmill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <signal.h>
 # include <unistd.h>
+# include <string.h>
 
 void	ft_putchar(char c);
 void	ft_putstr(char *str);

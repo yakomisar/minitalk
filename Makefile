@@ -1,4 +1,3 @@
-
 SERVER		= server
 CLIENT		= client
 
