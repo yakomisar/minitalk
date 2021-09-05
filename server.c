@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmacmill <jmacmill@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/05 13:54:34 by jmacmill          #+#    #+#             */
+/*   Updated: 2021/09/05 13:54:36 by jmacmill         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
 void	ft_decrypt(int val)
@@ -26,7 +38,7 @@ void	my_handler(int sign)
 
 int	main(void)
 {
-	pid_t my_pid;
+	pid_t	my_pid;
 
 	my_pid = getpid();
 	ft_putstr("Please use the following pid-number: ");
