@@ -6,7 +6,7 @@
 /*   By: jmacmill <jmacmill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 13:50:25 by jmacmill          #+#    #+#             */
-/*   Updated: 2021/09/05 13:50:46 by jmacmill         ###   ########.fr       */
+/*   Updated: 2021/09/09 20:54:44 by jmacmill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,19 @@ void	ft_putstr(char *str)
 		ft_putchar(str[i]);
 		i++;
 	}
+}
+
+int	ft_strlen(char *s)
+{
+	int	i;
+	
+	i = 0;
+	while (*s)
+	{
+		i++;
+		s++;
+	}
+	return (i);
 }
 
 void	ft_putnbr(int n)

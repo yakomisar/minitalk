@@ -6,68 +6,27 @@
 /*   By: jmacmill <jmacmill@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 13:50:36 by jmacmill          #+#    #+#             */
-/*   Updated: 2021/09/05 19:24:54 by jmacmill         ###   ########.fr       */
+/*   Updated: 2021/09/09 20:59:53 by jmacmill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-
-void	ft_putchar_fd(char c, int fd)
-{
-	write(fd, &c, 1);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
-
-	if (s == NULL)
-		return ;
-	i = 0;
-	while (s[i] != '\0')
-	{
-		ft_putchar_fd(s[i], fd);
-		i++;
-	}
-}
-
-void	ft_putnbr_fd(int n, int fd)
-{
-	if (n > 2147483647 || n < -2147483648)
-		return ;
-	if (n == -2147483648)
-	{
-		ft_putstr_fd("-2147483648", fd);
-		return ;
-	}
-	if (n < 0)
-	{
-		n = n * -1;
-		ft_putchar_fd('-', fd);
-	}
-	if (n < 10)
-	{
-		ft_putchar_fd(n + '0', fd);
-		return ;
-	}
-	ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd((n % 10) + '0', fd);
-	return ;
-}
-
 void	my_handler(int sig)
 {
-	static int	received = 0;
+	static int	received;
 
-	write(1, "i", 1);
+	received = 0;
+	
 	if (sig == SIGUSR1)
-		++received;
-	else
 	{
-		ft_putnbr_fd(received, 1);
-		write(1, "\n", 1);
-		exit(0);
+		++received;
+		//write(1, "1", 1);
+	}
+	if (sig == SIGUSR2)
+	{
+		++received;
+		//write(1, "0", 1);
 	}
 }
 
@@ -90,31 +49,58 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-static void	message_handler(int pid, char *str)
+static void	message_handler(int pid, char *c)
 {
-	int		i;
-	char	c;
+	int	i;
+	int	counter;
 
-	while (*str)
+	i = 0;
+	counter = 128;
+	ft_putstr("Send: ");
+	ft_putnbr(ft_strlen(c));
+	ft_putstr("\nReceived: ");
+	while (c[i] != '\0')
 	{
-		i = 8;
-		c = *str++;
-		while (i--)
+		while (counter >= 1)
 		{
-			if (c >> i & 1)
-				kill(pid, SIGUSR2);
-			else
+			if (c[i] & counter)
 				kill(pid, SIGUSR1);
-			usleep(40);
+			else
+				kill(pid, SIGUSR2);
+			usleep(1000);
+			counter /= 2;
 		}
+		counter = 128;
+		i++;
 	}
 	i = 8;
 	while (i--)
 	{
-		kill(pid, SIGUSR1);
+		kill(pid, SIGUSR2);
 		usleep(40);
 	}
+	exit(1);
 }
+
+// static void	message_handler(int pid, char *str)
+// {
+// 	int		i;
+// 	char	c;
+
+// 	while (*str)
+// 	{
+// 		i = 8;
+// 		c = *str++;
+// 		while (i--)
+// 		{
+// 			if (c >> i & 1)
+// 				kill(pid, SIGUSR2);
+// 			else
+// 				kill(pid, SIGUSR1);
+// 			usleep(40);
+// 		}
+// 	}
+// }
 
 int	main(int argc, char **argv)
 {
