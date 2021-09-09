@@ -12,62 +12,49 @@
 
 #include "minitalk.h"
 
-void	ft_decrypt(int val)
+void	ft_putchar_fd(char c, int fd)
 {
-	static int	i;
-	static char	c;
-
-	i++;
-	c = c << 1;
-	c = c | (c | val);
-	if (i == 8)
-	{
-		write(1, &c, 1);
-		i = 0;
-		c = 0;
-	}
+	write(fd, &c, 1);
 }
 
-void	my_handler(int sign, siginfo_t *siginfo, void *context)
+static void	ft_sigaction(int sig, siginfo_t *siginfo, void *context)
 {
+	static int				i = 0;
+	static unsigned char	c = 0;
+
 	(void)context;
-	if (sign == SIGUSR1)
+	// c |= (sig == SIGUSR2);
+	c = c | (c | sig);
+	if (++i == 8)
 	{
-		ft_decrypt(1);
+		i = 0;
+		if (!c)
+		{
+			kill(siginfo->si_pid, SIGUSR2);
+			return ;
+		}
+		ft_putchar_fd(c, 1);
+		c = 0;
 		kill(siginfo->si_pid, SIGUSR1);
 	}
-	if (sign == SIGUSR2)
-	{
-		ft_decrypt(0);
-		kill(siginfo->si_pid, SIGUSR1);
-	}
+	else
+		c <<= 1;
 }
 
 int	main(void)
 {
 	pid_t				my_pid;
 	struct sigaction	act;
-	sigset_t			set;
 	
 	my_pid = getpid();
 	ft_putstr("Please use the following pid-number: ");
 	ft_putnbr(my_pid);
 	ft_putstr(" in order to connect and send your message.\n");
-	memset(&act, '\0', sizeof(act));
-	sigemptyset(&set);
-	sigaddset(&set, SIGUSR1);
-	sigaddset(&set, SIGUSR2);
-	act.sa_mask = set;
-	act.sa_sigaction = &my_handler;
-	//act.sa_sigaction = &my_handler;
+	act.sa_sigaction = ft_sigaction;
+	act.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &act, 0);
 	sigaction(SIGUSR2, &act, 0);
-	act.sa_flags = SA_SIGINFO;
 	while (1)
-	{
-		// signal(SIGUSR1, my_handler);
-		// signal(SIGUSR2, my_handler);
 		pause();
-	}
 	return (0);
 }
