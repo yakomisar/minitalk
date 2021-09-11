@@ -12,58 +12,31 @@
 
 #include "minitalk.h"
 
-// static void	ft_sigaction(int sig, siginfo_t *siginfo, void *context)
-// {
-// 	static int				i;
-// 	static unsigned char	c;
-
-// 	(void)context;
-// 	i = 0;
-// 	c = 0;
-// 	if (sig == SIGUSR1)
-// 	{
-// 		//write(1, "1", 1);
-// 		kill(siginfo->si_pid, SIGUSR1);
-// 	}
-// 	if (sig == SIGUSR2)
-// 	{
-// 		//write(1, "0", 1);
-// 		kill(siginfo->si_pid, SIGUSR1);
-// 	}
-// }
-
-void	ft_decrypt(int val)
-{
-	static int	i;
-	static char	c;
-
-	i++;
-	c = c << 1;
-	c = c | (c | val);
-	if (i == 8)
-	{
-		write(1, &c, 1);
-		i = 0;
-		c = 0;
-	}
-}
-
 static void	ft_sigaction(int sig, siginfo_t *siginfo, void *context)
 {
+	static char c = 0;
+	static int	i = 0;
+
 	(void)context;
-	
+	i++;
 	if (sig == SIGUSR1)
+		c |= (c | 1);
+	else
+		c |= (c | 0);
+	if (i == 8)
 	{
-		ft_decrypt(1);
+		i = 0;
+		if (!c)
+		{
+			kill(siginfo->si_pid, SIGUSR2);
+			return ;
+		}
+		write(1, &c, 1);
 		kill(siginfo->si_pid, SIGUSR1);
-		usleep(10);
+		c = 0;
 	}
-	if (sig == SIGUSR2)
-	{
-		ft_decrypt(0);
-		kill(siginfo->si_pid, SIGUSR2);
-		usleep(10);
-	}
+	else
+		c <<= 1;
 }
 
 int	main(void)

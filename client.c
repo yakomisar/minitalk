@@ -14,19 +14,15 @@
 
 void	my_handler(int sig)
 {
-	static int	received;
-
-	received = 0;
+	static int	received = 0;
 	
 	if (sig == SIGUSR1)
-	{
-		++received;
-		//write(1, "1", 1);
-	}
+		received++;
 	if (sig == SIGUSR2)
 	{
-		++received;
-		//write(1, "0", 1);
+		ft_putnbr(received);
+		ft_putstr("\nTransfer successful!!");
+		exit(0);
 	}
 }
 
@@ -67,40 +63,21 @@ static void	message_handler(int pid, char *c)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(1000);
+			usleep(70);
 			counter /= 2;
 		}
 		counter = 128;
 		i++;
 	}
 	i = 8;
-	while (i--)
+	while (i)
 	{
 		kill(pid, SIGUSR2);
-		usleep(40);
+		usleep(60);
+		i--;
 	}
-	exit(1);
+	exit(0);
 }
-
-// static void	message_handler(int pid, char *str)
-// {
-// 	int		i;
-// 	char	c;
-
-// 	while (*str)
-// 	{
-// 		i = 8;
-// 		c = *str++;
-// 		while (i--)
-// 		{
-// 			if (c >> i & 1)
-// 				kill(pid, SIGUSR2);
-// 			else
-// 				kill(pid, SIGUSR1);
-// 			usleep(40);
-// 		}
-// 	}
-// }
 
 int	main(int argc, char **argv)
 {
@@ -108,7 +85,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 3 || !is_numeric(argv[1]))
 	{
-		ft_putstr("Please use the following format: [PID] [messaage]\n");
+		ft_putstr("Please use the following: [PID] [messaage]\n");
 		return (1);
 	}
 	act.sa_handler = my_handler;
