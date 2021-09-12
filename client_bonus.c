@@ -10,7 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
+
+void	my_handler(int sig)
+{
+	static int	received = 0;
+	
+	if (sig == SIGUSR1)
+		received++;
+	if (sig == SIGUSR2)
+	{
+		ft_putnbr(received);
+		ft_putstr("\nTransfer successful!!");
+		exit(0);
+	}
+}
 
 int	ft_isdigit(int c)
 {
@@ -38,6 +52,9 @@ static void	message_handler(int pid, char *c)
 
 	i = 0;
 	counter = 128;
+	ft_putstr("Send: ");
+	ft_putnbr(ft_strlen(c));
+	ft_putstr("\nReceived: ");
 	while (c[i] != '\0')
 	{
 		while (counter >= 1)
@@ -64,11 +81,19 @@ static void	message_handler(int pid, char *c)
 
 int	main(int argc, char **argv)
 {
+	struct sigaction	act;
+
 	if (argc != 3 || !is_numeric(argv[1]))
 	{
 		ft_putstr("Please use the following: [PID] [messaage]\n");
 		return (1);
 	}
+	act.sa_handler = my_handler;
+	act.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &act, 0);
+	sigaction(SIGUSR2, &act, 0);
 	message_handler(ft_atoi(argv[1]), argv[2]);
+	while (1)
+		pause();
 	return (0);
 }

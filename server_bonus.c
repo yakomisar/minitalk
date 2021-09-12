@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
 static void	ft_sigaction(int sig, siginfo_t *siginfo, void *context)
 {
@@ -27,8 +27,12 @@ static void	ft_sigaction(int sig, siginfo_t *siginfo, void *context)
 	{
 		i = 0;
 		if (!c)
+		{
+			kill(siginfo->si_pid, SIGUSR2);
 			return ;
+		}
 		write(1, &c, 1);
+		kill(siginfo->si_pid, SIGUSR1);
 		c = 0;
 	}
 	else
