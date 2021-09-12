@@ -46,7 +46,7 @@ static void	message_handler(int pid, char *c)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(70);
+			usleep(60);
 			counter /= 2;
 		}
 		counter = 128;

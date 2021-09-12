@@ -18,6 +18,7 @@ static void	ft_sigaction(int sig, siginfo_t *siginfo, void *context)
 	static int	i = 0;
 
 	(void)context;
+	(void)siginfo;
 	i++;
 	if (sig == SIGUSR1)
 		c |= (c | 1);

@@ -45,6 +45,6 @@ clean:
 fclean: clean
 	$(RM) $(SERVER) $(CLIENT) $(SERVER_BONUS) $(CLIENT_BONUS)
 
-re: fclean all
+re: fclean all bonus
 
 .PHONY: all clean fclean re bonus
